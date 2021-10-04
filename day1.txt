@@ -1,0 +1,132 @@
+1234567890
+-------------------
+Rajesh Kumar
+==========================
+9:30 AM - 5:30 PM 
+-----------------
+Lunch - 1 - 2 PM
+------------------
+BREAK 
+	11: AM - 15 mins
+	3:30 PM - 15 mins
+-----------------------------------
+Demo + Lab === Cloud AWS
+Notes - Github
+Step by Step - DevOpsSchool
+----------------------------------
+==========================================
+What is Kubernetes?
+Why Kubernetes?
+How Kubernetes works?
+What is POD?
+--------------------------------------
+Demo - k8s Clustor Setup
+
+
+Assignment  - 30 mins - BestDevOps.com
+
+Title is - Defined Kubernetes in <<Rajesh>> words!!!
+----------------
+What is Kubernetes?
+- 15 Points
+Why Kubernetes?
+- 10 Points
+How Kubernetes works?
+- All components and roles of their components
+What is POD?
+- - 15 Points
+
+=================================================
+Master Node
+=================================================
+- API Server 	-> POD -> Container -> Docker Image -> Google Registry
+- Etcd		-> POD -> Container -> Docker Image -> Google Registry
+- Controller mgr-> POD -> Container -> Docker Image -> Google Registry
+- Schedular	-> POD -> Container -> Docker Image -> Google Registry
+
+- Kubelet
+- Kubectl 
+- Docker Engine
+- Kubeadm init
+- Kube Proxy	-> POD -> Container -> Docker Image -> Google Registry
+	- WeaveNet -> POD -> Container -> Docker Image -> Google Registry
+
+
+Worker Node
+=================================================
+- Kubelet
+- Kubectl 
+- Docker Engine
+- Kubeadm join
+
+- Kube Proxy	-> POD -> Container -> Docker Image -> Google Registry
+	- WeaveNet -> POD -> Container -> Docker Image -> Google Registry
+
+Workstation
+=================================================
+- Kubectl 
+
+https://www.devopsschool.com/blog/setting-up-kubernetes-clusters-using-kubeadm-manual-way-in-rhel-7-centos7/
+https://www.devopsschool.com/blog/how-to-change-the-cgroup-driver-from-cgroupfs-systemd-in-docker/
+https://www.devopsschool.com/blog/
+
+Master Workstation
+----------------
+13.126.231.108
+
+Worker
+-----------------
+3.109.209.198
+
+
+
+
+
+
+
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join 172.31.9.75:6443 --token zk5aec.3gnnelj9b7apiujh \
+        --discovery-token-ca-cert-hash sha256:847d07c3a8c0abcbfe2bc28a51d9885db584dfdac70e3e32955c6c64ececcf57
+[root@ip-172-31-9-75 centos]#
+
+
+============================================================
+
+
+How to config kubectl? How to setup a workstations.
+
+Workstation
+=================================================
+- Kubectl 
+	- config
+	---------------
+	CURR/.kube/config
+	ENV - KUBECONFIG=//config
+	USER_HOME/.kube/config			=== DEFAULT
+
+
+
+
+
+
+
+
+
+

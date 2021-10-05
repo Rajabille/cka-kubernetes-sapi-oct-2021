@@ -454,6 +454,7 @@ spec:
 
 
 
+
  128  clear
   129  kubectl create -h
   130  ckear
@@ -512,24 +513,97 @@ spec:
   183  ls
   184  history
 
+==============================================================
+Working and Troubleshooting POD
+==============================================================
+
+Troubleshooting and Debugging Commands:
+  describe      Show details of a specific resource or group of resources
+  logs          Print the logs for a container in a pod
+  attach        Attach to a running container
+  exec          Execute a command in a container
+  port-forward  Forward one or more local ports to a pod
+  cp            Copy files and directories to and from containers
+  auth          Inspect authorization
+
+  logs          Print the logs for a container in a pod
+	LOGS OF PID1??
+	=======================
+  190  kubectl get pods
+  191  kubectl apply -f pod1.yaml
+  192  kubetl get pods
+  193  kubectl get pods
+  194  exit
+  195  clear
+  196  ls
+  197  kubectl get pods
+  198  kubectl logs nodehelloworld.example.com
+  199  kubectl get pods -o wide
+  200  curl http://10.44.0.1
+  201  kubectl logs nodehelloworld.example.com
+
+  204  kubectl logs -h
 
 
+  attach        Attach to a running container
+  - You can attached to a session of PID 1 of the container
+
+  exec          Execute a command in a container
+  - You can execute any executable inside a container
+BUT if you execute /bin/bash with -it combination - then you can go inside a Container.
+
+ 206  lear
+  207  clear
+  208  history
+  209  clear
+  210  kubectl get pods
+  211  kubectl exec nodehelloworld.example.com ls
+  212  kubectl exec nodehelloworld.example.com du
+  213  clear
+  214  kubectl exec nodehelloworld.example.com df
+  215  kubectl exec nodehelloworld.example.com ps -eaf
+  216  kubectl exec nodehelloworld.example.com ps
+  217  clear
+  218  kubectl get pods
+  219  kubectl attach nodehelloworld.example.com
+  220  clear
+  221  kubectl get pods
+  222  kubectl exec -it nodehelloworld.example.com /bin/bash
+  223  history
+  224  clear
+
+  229  kubectl exec -h
+  231  kubectl attach -h
+
+port-forward  Forward one or more local ports to a pod
+
+kubectl port-forward --address 0.0.0.0 pod/nodehelloworld.example.com 8888:80
+
+  235  kubectl port-forward -h
+  236  clear
+  237  kubectl get pods
+  238  clear
+  239  kubectl port-forward --address 0.0.0.0 pod/nodehelloworld.example.com 8888:80
+  240  kubectl port-forward -h
 
 
+ cp            Copy files and directories to and from containers
 
 
+kubectl cp <some-namespace>/<some-pod>:/tmp/foo /tmp/bar
+
+kubectl cp ns.yaml nodehelloworld.example.com:/tmp
+kubectl cp nodehelloworld.example.com:/tmp/ns.yaml /tmp/ns.yaml
 
 
-
-
-
-
-
-
-
-
-
-
+auth          Inspect authorization
+  294  kubectl auth
+  295  clear
+  296  kubectl auth can-i create pod
+  297  kubectl auth can-i delete pod
+  298  kubectl auth can-i delete ns
+  299  kubectl auth can-i edit ns
+  300  kubectl auth can-i -h
 
 
 
@@ -537,7 +611,7 @@ Assignment
 -----------------------
 How certifcations based auth works?? and write a blog bestdevops.com
 Write a diff between Create vs Apply and Put Vs Post and define IDEOMPOTENCY?
-
-
+What is diff between kubectl exec and kubectl attach? write a blog bestdevops.com
+What is diff between docker exec and docker attach? write a blog bestdevops.com
 
 

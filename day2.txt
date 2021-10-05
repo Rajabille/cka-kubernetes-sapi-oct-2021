@@ -434,6 +434,110 @@ spec:
 
 
 
+POD
+------------------------------------------------
+https://www.devopsschool.com/blog/kubernetes-pod-example-programs/
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nodehelloworld.example.com
+  labels:
+    app: helloworld
+spec:
+  containers:
+  - name: devopsschool1
+    image: scmgalaxy/nginx-devopsschoolv1
+    ports:
+    - name: nginx-port
+      containerPort: 80
+
+
+
+ 128  clear
+  129  kubectl create -h
+  130  ckear
+  131  clear
+  132  kubectl get pods
+  133  kubectl get pods -n=rajesh
+  134  vi pod1.yaml
+  135  kubectl create -f pod1.yaml
+  136  vi pod1.yaml
+  137  kubectl create -f pod1.yaml
+  138  kubectl get pods -n=rajesh
+  139  kubectl get pods
+  140  kubectl create -f pod1.yaml
+  141  kubectl get pods -n=rajesh
+  142  kubectl create -f pod1.yaml -n=rajesh
+  143  kubectl get pods -n=rajesh
+  144  clear
+  145  kubectl get pods
+  146  kubectl get pods -n=rajesh
+  147  kubectl get pods --all-namespaces
+  148  clear
+  149  kubectl get pods
+  150  kubectl describe pod nodehelloworld.example.com
+  151  clear
+  152  kubectl describe pod nodehelloworld.example.com -n=rajesh
+  153  clear
+  154  kubectl get pods
+  155  kubectl get pods -h
+  156  clear
+  157  kubectl get pods -o wide
+  158  kubectl get pods -o wide --show-labels
+  159  kubectl get pods -h
+  160  clear
+  161  kubectl get pods -h
+  162  cloear
+  163  clear
+  164  ls
+  165  kubectl get pods
+  166  kubectl edit pod nodehelloworld.example.com
+  167  kubectl get pods -o wide --show-labels
+  168  vi pod1.yaml
+  169  kubectl apply -f pod1.yaml
+  170  kubectl get pods -o wide --show-labels
+  171  vi pod1.yaml
+  172  kubectl apply -f pod1.yaml
+  173  kubectl get pods -o wide --show-labels
+  174  clear
+  175  kubectl get pods
+  176  kubectl delete pod nodehelloworld.example.com
+  177  kubectl delete -f pod1.yaml -n=rajesh
+  178  history
+  179  clear
+  180  kubectl labels -h
+  181  kubectl label -h
+  182  clear
+  183  ls
+  184  history
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Assignment
 -----------------------
 How certifcations based auth works?? and write a blog bestdevops.com
+Write a diff between Create vs Apply and Put Vs Post and define IDEOMPOTENCY?
+
+
+
+

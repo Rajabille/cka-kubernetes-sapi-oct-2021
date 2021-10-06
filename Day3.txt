@@ -215,6 +215,120 @@ RollingUpdateStrategy:  30% max unavailable, 20% max surge
 ==========================================
 
 
+
+
+=========================================================
+
+kubectl create service clusterip my-cs --tcp=5678:80 -n=rajesh
+
+5678:80
+
+services port - 5678
+container port - 80
+
+
+  687  kubectl apply -f pod1.yaml -n=rajesh
+  688  kubectl apply -f pod2.yaml -n=rajesh
+  689  clear
+  690  ls
+  691  kubectl get pods -n=rajesh -o wide
+  692  curl http://10.42.0.10
+  693  curl http://10.36.0.4
+  694  kubectl get pods -n=rajesh --show-lables
+  695  kubectl get pods -n=rajesh --show-labels
+  696  clear
+  697  ls
+  698  kubectl create -h
+  699  clear
+  700  kubectl create service -h
+  701  kubectl create service clusterip -h
+  702  clear
+  703  kubectl get svc -n=rajesh
+  704  kubectl get svc
+  705  more $HOME/.kube/config
+  706  vi $HOME/.kube/config
+  707  clear
+  708  kubectl get svc
+  709  kubectl get svc -n=rajesh
+  710  kubectl create service clusterip my-cs --tcp=5678:80 -n=rajesh
+  711  kubectl get svc -n=rajesh
+  712  kubectl describe svc my-cs -n=rajesh
+  713  kubectl get pods -n=rajesh -o wide --show-labels
+  714  kubectl edit svc my-cs -n=rajesh
+  715  kubectl describe svc my-cs -n=rajesh
+  716  kubectl get pods -n=rajesh -o wide --show-labels
+  717  kubectl edit svc my-cs -n=rajesh
+  718  kubectl get pods -n=rajesh -o wide --show-labels
+  719  kubectl describe svc my-cs -n=rajesh
+  720  kubectl edit svc my-cs -n=rajesh
+  721  kubectl describe svc my-cs -n=rajesh
+  722  kubectl get pods -n=rajesh -o wide --show-labels
+  723  kubectl edit svc my-cs -n=rajesh
+  724  kubectl describe svc my-cs -n=rajesh
+  725  kubectl get pods -n=rajesh -o wide --show-labels
+  726  curl http://10.98.233.233
+  727  curl http://10.98.233.233:5678
+  728  watch curl http://10.98.233.233:5678
+  729  kubectl describe svc my-cs -n=rajesh
+  730  kubectl get pods -n=rajesh -o wide --show-labels
+  731  kubectl explain svc.IPs
+  732  kubectl explain svc
+  733  kubectl explain svc.spec
+  734  kubectl edit svc my-cs -n=rajesh
+  735  kubectl explain svc.spec.clusterIPs
+  736  clear
+
+ClustorIP - 
+	SERVICE is created and Assigned with IP from POD network aka Clustor network
+
+NodePort
+	- SERVICE is created and Assigned with IP from POD network aka Clustor network
+	&
+	Service get port-forward at EACH NODE of the Clustor 
+
+
+node-ip:port ---> svc-ip:port ---> pod-ip:port
+
+13.126.231.108:31207 --> 10.106.45.236:5678 -> 10.36.0.4:80
+			====================
+				LOAD BAL
+
+kubectl create service nodeport my-np --tcp=5678:80 -n=rajesh
+
+
+Create a service using a specified subcommand.
+
+Aliases:
+service, svc
+
+Available Commands:
+  clusterip    Create a ClusterIP service			DONE
+  externalname Create an ExternalName service
+  loadbalancer Create a LoadBalancer service			
+  nodeport     Create a NodePort service			DONE
+
+loadbalancer Create a LoadBalancer service
+================================
+	NodePort
+	- SERVICE is created and Assigned with IP from POD network aka Clustor network
+	&
+	Service get port-forward at EACH NODE of the Clustor
+	------------
+	&
+	K8 Request Cloud Platform to create Load Balancer - DONE
+	I have this workers-port. Add into ur LB
+
+
+$ kubectl create service loadbalancer my-lb --tcp=5678:80 -n=rajesh
+- PENDING
+	---- MANUAL CONFIG of k8s with AWS
+	---- Use KOPS (Auto Integ)
+	---- Use EKS (Auto Integ)
+
+
+
+
+
 Assignment - BestDevOps.com
 ===========================
 Define ReplicaSets with atleast 2 example
@@ -223,6 +337,21 @@ Write a post...
 What happen when you pause a deployment using rollout?
 
 What is a Deamonset? Explain with Example
+
+What is a user of default service as below;
+[centos@ip-172-31-9-75 rajesh]$ kubectl get svc
+NAME         TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   45h
+
+What is an ExternalName service
+
+
+
+
+
+
+
+
 
 
 

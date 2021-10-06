@@ -77,10 +77,152 @@ ReplicationController++++ BUG Fixes = ReplicaSets v1
 ReplicaSets == ReplicationController
 rs	= 	rc
 
+
+
+
+
+65.1.167.192
+3.108.5.105
+==============================================================
+Deployment
+========================================
+https://www.devopsschool.com/blog/kubernetes-deployment-strategy-explained-with-example/
+https://www.devopsschool.com/blog/list-of-popular-deployment-strategies/
+
+Replication + Controller
+-------------------------------------
+	ReplicaSet
+
+Versioning
+Rollout
+Rollback
+
+
+kubectl create deployment my-dep --image=scmgalaxy/nginx-devopsschoolv1 -n=rajesh
+
+kubectl scale --replicas=3 deploy/my-dep -n=rajesh
+
+
+Available Commands:
+  history     View rollout history		====== VERSIONING
+  pause       Mark the provided resource as paused	====== Make Rollout PAUSE
+  restart     Restart a resource			====== Make Rollout RESTART
+  resume      Resume a paused resource			====== Make Rollout UNPAUSE
+  status      Show the status of the rollout	====== STATUS of ROLLOUT
+  undo        Undo a previous rollout		==== ROLL BACK PRE VERSION
+
+
+
+kubectl rollout status deploy/my-dep -n=rajesh
+kubectl rollout history deploy/my-dep -n=rajesh
+
+kubectl rollout pause deploy/my-dep -n=rajesh
+kubectl rollout resume deploy/my-dep -n=rajesh
+kubectl rollout restart deploy/my-dep -n=rajesh
+
+kubectl rollout undo deploy/my-dep --to-revision=3 -n=rajesh
+
+
+
+
+
+  556  kubectl get rc -A
+  557  clear
+  558  kubectl create deployment my-dep --image=scmgalaxy/nginx-devopsschoolv1 -n=rajesh
+  559  kubectl get deploy -n=rajesh
+  560  kubectl get pods -n=rajesh
+  561  kubectl delete rc replicationcontroller -n=rajesh
+  562  kubectl delete rc replicationcontroller-example -n=rajesh
+  563  clear
+  564  ls
+  565  kubectl get pods -n=rajesh
+  566  kubectl get deploy -n=rajesh
+  567  kubectl describe deploy my-dep -n=rajesh
+  568  kubectl get rs -n=rajesh
+  569  clear
+  570  kubectl edit deploy my-dep -n=rajesh
+  571  kubectl get deploy -n=rajesh
+  572  kubectl scale -h
+  573  clear
+  574  kubectl scale --replicas=3 deploy/my-dep -n=rajesh
+  575  kubectl get deploy -n=rajesh
+  576  kubectl get deploy my-dep -n=rajesh
+  577  kubectl get deploy my-dep -n=rajesh -o yaml
+  578  clear
+  579  kubectlo get pods -n=rajesh
+  580  kubectl get pods -n=rajesh
+  581  kubectl delete pod my-dep-747b4ffb56-mzxd4 -n=rajesh
+  582  kubectl get pods -n=rajesh
+  583  clear
+  584  kubectl
+  585  clear
+  586  kubectl rollout -h
+  587  clear
+  588  kubectl rollout status deploy/my-dep -n=rajesh
+  589  clear
+  590  kubectl rollout history deploy/my-dep -n=rajesh
+  591  clear
+  592  kubectl rollout pause deploy/my-dep -n=rajesh
+  593  kubectl rollout status deploy/my-dep -n=rajesh
+  594  kubectl get pods -n=rajesh
+  595  kubectl get pods -n=rajesh -o wide
+  596  curl http:
+  597* curl http://
+  598  clear
+  599  kubectl get pods -n=rajesh -o wide
+  600  curl http://10.42.0.2
+  601  kubectl rollout history deploy/my-dep -n=rajesh
+  602  kubectl rollout resume deploy/my-dep -n=rajesh
+  603  clear
+  604  kubectl rollout status deploy/my-dep -n=rajesh
+  605  kubectl get pods -n=rajesh -o wide
+  606  kubectl rollout restart deploy/my-dep -n=rajesh
+  607  kubectl get pods -n=rajesh -o wide
+  608  kubectl rollout status deploy/my-dep -n=rajesh
+  609  kubectl get pods -n=rajesh -o wide
+  610  curl http://10.36.0.11
+  611  kubectl rollout history deploy/my-dep -n=rajesh
+  612  kubectl rollout restart deploy/my-dep -n=rajesh
+  613  kubectl rollout history deploy/my-dep -n=rajesh
+  614  clear
+  615  ls
+  616  kubectl edit deploy deploy/my-dep -n=rajesh
+  617  kubectl edit  deploy/my-dep -n=rajesh
+  618  kubectl rollout status deploy/my-dep -n=rajesh
+  619  kubectl rollout history deploy/my-dep -n=rajesh
+  620  kubectl get pods -n=rajesh -o wide
+  621  curl http://10.36.0.11
+  622  kubectl rollout undo -h
+  623  clear
+  624  kubectl rollout undo deploy/my-dep --to-revision=3 -n=rajesh
+  625  kubectl rollout status deploy/my-dep -n=rajesh
+  626  kubectl get pods -n=rajesh -o wide
+  627  curl http://10.36.0.11
+  628  kubectl rollout history deploy/my-dep -n=rajesh
+  629  clear
+  630  history
+
+
+
+
+kubectl create deployment my-dep1 --image=scmgalaxy/nginx-devopsschoolv1 -n=rajesh
+
+
+StrategyType:           RollingUpdate
+RollingUpdateStrategy:  30% max unavailable, 20% max surge
+			
+			20 max unavailable, 20 max surge
+==========================================
+
+
 Assignment - BestDevOps.com
 ===========================
 Define ReplicaSets with atleast 2 example
 
+Write a post...
+What happen when you pause a deployment using rollout?
+
+What is a Deamonset? Explain with Example
 
 
 

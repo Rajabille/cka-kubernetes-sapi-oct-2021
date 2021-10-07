@@ -1,0 +1,134 @@
+Emptydir
+https://www.devopsschool.com/blog/kubernetes-volume-emptydir-explained-with-examples/
+
+Hostpath
+https://www.devopsschool.com/blog/kubernetes-volume-hostpath-explained-with-examples/
+
+nfs
+
+/var/lib/kubelet/pods/{podid}/volumes/kubernetes.io~empty-dir/ on the given node where your pod is running.
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pd
+spec:
+  containers:
+  - image: scmgalaxy/nginx-devopsschoolv1
+    name: test-container
+    volumeMounts:
+    - mountPath: /cache
+      name: cache-volume
+  volumes:
+  - name: cache-volume
+    emptyDir: {}
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pd
+spec:
+  containers:
+  - image: scmgalaxy/nginx-devopsschoolv1
+    name: test-container
+    volumeMounts:
+    - mountPath: /test-pd
+      name: test-volume
+  volumes:
+  - name: test-volume
+    hostPath:
+      path: /data
+      type: DirectoryOrCreate
+
+=======================================
+STATIC ->
+PROVISIONING | BINDING | USING
+PV ---> 	PVC ---> BINDING (ATTACHing + mOUNT) 
+----------
+hOSTPATH
+https://www.devopsschool.com/blog/persistentvolume-persistentvolumeclaim-volumes-using-hostpath/
+
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: rajesh-1
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/tmp/devopsschool"
+
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: rajesh-3
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 3Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/tmp/devopsschool"
+
+
+
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rajesh-pvc-1
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: rajesh-pvc-2
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: task-pv-pod
+spec:
+  containers:
+    - name: task-pv-container
+      image: scmgalaxy/nginx-devopsschoolv1
+      ports:
+        - containerPort: 80
+          name: "http-server"
+      volumeMounts:
+        - mountPath: "/usr/share/nginx/html"
+          name: task-pv-storage1
+  volumes:
+    - name: task-pv-storage1
+      persistentVolumeClaim:
+        claimName: rajesh-pvc-2
+    - name: task-pv-storage2
+      persistentVolumeClaim:
+        claimName: rajesh-pvc-1
+
+
+

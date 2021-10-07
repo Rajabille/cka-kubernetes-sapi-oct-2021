@@ -218,3 +218,65 @@ spec:
 52.66.224.111	172.31.44.228
 3.110.50.205	172.31.12.231.
 13.234.66.116	172.31.9.75
+======================================================
+Step 1- Setup NFS Server.
+https://www.devopsschool.com/blog/setup-nfs-server-and-use-inside-a-kubernetes-pods-in-rhel-centos7/
+
+Step 2 - Kubernetes PersistentVolume and PersistentVolumeClaim using NFS volume types
+https://www.devopsschool.com/blog/kubernetes-persistentvolume-and-persistentvolumeclaim-using-nfs-volume-types/
+
+ConfigMap
+https://www.devopsschool.com/blog/kubernetes-configmap-explained-using-example/
+
+Secret
+https://www.devopsschool.com/blog/explained-kubernetes-secret-with-example/
+
+StorageClass
+https://kubernetes.io/docs/concepts/storage/storage-classes/
+
+USER --> POD --> pVC ---> PV (IT WOULD LOOK INTO POOL OF PV) = STATIC
+
+
+USER --> POD --> pVC ---> STORAGE CLASS -> PV = DYNAMIC
+
+
+
+
+
+
+
+
+
+Assignment
+==============================================
+Lab of NFS
+==============================================
+[centos@ip-172-31-9-75 rajesh]$ kubectl get cm
+NAME               DATA   AGE
+kube-root-ca.crt   1      2d22h
+[centos@ip-172-31-9-75 rajesh]$ kubectl get cm -n=rajesh
+NAME               DATA   AGE
+kube-root-ca.crt   1      2d
+[centos@ip-172-31-9-75 rajesh]$
+==============================================
+[centos@ip-172-31-9-75 rajesh]$ kubectl get secret
+NAME                  TYPE                                  DATA   AGE
+default-token-hbrcq   kubernetes.io/service-account-token   3      2d22h
+[centos@ip-172-31-9-75 rajesh]$ kubectl get secret -n=rajesh
+NAME                  TYPE                                  DATA   AGE
+default-token-tqmbk   kubernetes.io/service-account-token   3      2d1h
+mysecret              Opaque                                2      11s
+[centos@ip-172-31-9-75 rajesh]$
+==============================================
+
+
+
+
+
+
+
+
+
+
+
+

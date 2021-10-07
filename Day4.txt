@@ -240,6 +240,172 @@ USER --> POD --> pVC ---> PV (IT WOULD LOOK INTO POOL OF PV) = STATIC
 USER --> POD --> pVC ---> STORAGE CLASS -> PV = DYNAMIC
 
 
+Understanding Authentication & Authorization in kubernetes
+===============================================================
+https://www.devopsschool.com/blog/understanding-authentication-authorization-in-kubernetes/
+
+
+Authentication
+
+
+ clusterrole         Create a cluster role
+  clusterrolebinding  Create a cluster role binding for a particular cluster role
+  role                Create a role with single rule
+  rolebinding         Create a role binding for a particular role or cluster role
+  serviceaccount      Create a service account with the specified name
+ 
+ certificatesigningrequests
+
+ 1183  kubectl get csr
+ 1184  kubectl certificate -h
+ 1185  kubectl certificate approve -h
+ 1186  kubectl certificate deny -h
+
+
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: office
+  name: deployment-manager
+rules:
+- apiGroups: ["", "extensions", "apps"]
+  resources: ["deployments", "replicasets", "pods"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"] # You can also use ["*"]
+
+
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: deployment-manager-binding
+  namespace: office
+subjects:
+- kind: User
+  name: employee
+  apiGroup: ""
+roleRef:
+  kind: Role
+  name: deployment-manager
+  apiGroup: ""
+
+
+
+- kind: User
+  name: employee
+  apiGroup: ""
+
+- kind: ServiceAccount
+  name: build
+  apiGroup: "rbac.authorization.k8s.io"
+
+- kind: Group
+  name: bitnai
+  apiGroup: ""
+
+
+ 1142  ls
+ 1143  openssl genrsa -out employee.key 2048
+ 1144  ls
+ 1145  more employee.key
+ 1146  clear
+ 1147  ls
+ 1148  openssl req -new -key employee.key -out employee.csr -subj "/CN=employee/O=bitnami"
+ 1149  kubectl explain csr
+ 1150  clear
+ 1151  kubectl create -h
+ 1152  clear
+ 1153  kubectl
+ 1154  kubectl api-resources
+ 1155  c
+ 1156  clear
+ 1157  ls
+ 1158  openssl x509 -req -in employee.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out employee.crt -days 500
+ 1159  sudo openssl x509 -req -in employee.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out employee.crt -days 500
+ 1160  ls
+ 1161  clear
+ 1162  kubectl config view
+ 1163  kubectl config -h
+ 1164  clear
+ 1165  kubectl config set-credentials employee --client-certificate=/root/employee.crt  --client-key=/root/employee.key
+ 1166  kubectl config view
+ 1167  clear
+ 1168  kubectl config set-context employee-context --cluster=kubernetes --namespace=office --user=employee
+ 1169  kubectl config view
+ 1170  clear
+ 1171  kubectl -h
+ 1172  clear
+ 1173  kubectl
+ 1174  clear
+ 1175  kubectl options
+ 1176  cleclear
+ 1177  clear
+ 1178  kubectl create namespace office
+ 1179  kubectl --context=employee-context get pods
+ 1180  pwd
+ 1181  vi $HOME/.kube/config
+ 1182  kubectl --context=employee-context get pods
+ 1183  kubectl get csr
+ 1184  kubectl certificate -h
+ 1185  kubectl certificate approve -h
+ 1186  kubectl certificate deny -h
+ 1187  clear
+ 1188  history
+ 1189  clear
+ 1190  kubectl
+ 1191  clear
+ 1192  kubectl api-resources
+ 1193  clear
+ 1194  kubectl create -h
+ 1195  clear
+ 1196  kubectl create serviceaccount -h
+ 1197  clear
+ 1198  ls
+ 1199  kubectl get sa
+ 1200  kubectl get sa -n=rajesh
+ 1201  kubectl get sa -n=raja
+ 1202  clear
+ 1203  ls
+ 1204  vi role.yaml
+ 1205  vi rb.yaml
+ 1206  kubectl explain rolebinding.subjects.apiGroup
+ 1207  kubectl api-resources
+ 1208  kubectl explain rolebinding.subjects.apiGroup
+ 1209  clear
+ 1210  ls
+ 1211  kubectl apply -f rb.yaml
+ 1212  kubectl api-resources
+ 1213  clear
+ 1214  ls
+ 1215  vi rb.yaml
+ 1216  vi role.yaml
+ 1217  vi rb.yaml
+ 1218  kubectl apply -f role.yaml
+ 1219  kubectl apply -f rb
+ 1220  kubectl apply -f rb.yaml
+ 1221  kubectl get roles
+ 1222  kubectl get roles -n=office
+ 1223  kubectl get rolebinding -n=office
+ 1224  clear
+ 1225  kubectl --context=employee-context run nginx --image=nginx
+ 1226  kubectl get pods -n=officew
+ 1227  kubectl get pods -n=office
+ 1228  kubectl get deploy -n=office
+ 1229  kubectl create -f
+ 1230  kubectl create -h
+ 1231  clear
+ 1232  kubectl --context=employee-context run nginx --image=nginx
+ 1233  kubectl get pods -n=office
+ 1234  kubectl run -h
+ 1235  cleare
+ 1236  clear
+ 1237  ls
+ 1238  kubectl --context=employee-context get pods
+ 1239  kubectl --context=employee-context get svc
+
+
+
+
+
+
 
 
 
@@ -251,6 +417,7 @@ Assignment
 ==============================================
 Lab of NFS
 ==============================================
+- Why we have kube-root-ca.crt configmap in each namespaces of kubernetes clustor?
 [centos@ip-172-31-9-75 rajesh]$ kubectl get cm
 NAME               DATA   AGE
 kube-root-ca.crt   1      2d22h
@@ -259,6 +426,7 @@ NAME               DATA   AGE
 kube-root-ca.crt   1      2d
 [centos@ip-172-31-9-75 rajesh]$
 ==============================================
+- Why we have default-token-hbrcq secret in each namespaces of kubernetes clustor?
 [centos@ip-172-31-9-75 rajesh]$ kubectl get secret
 NAME                  TYPE                                  DATA   AGE
 default-token-hbrcq   kubernetes.io/service-account-token   3      2d22h
@@ -268,6 +436,17 @@ default-token-tqmbk   kubernetes.io/service-account-token   3      2d1h
 mysecret              Opaque                                2      11s
 [centos@ip-172-31-9-75 rajesh]$
 ==============================================
+- Why we have default serviceaccount in each namespaces of kubernetes clustor?
+[centos@ip-172-31-9-75 rajesh]$ kubectl get sa
+NAME      SECRETS   AGE
+default   1         3d
+[centos@ip-172-31-9-75 rajesh]$ kubectl get sa -n=rajesh
+NAME      SECRETS   AGE
+default   1         2d2h
+[centos@ip-172-31-9-75 rajesh]$ kubectl get sa -n=raja
+NAME      SECRETS   AGE
+default   1         30h
+[centos@ip-172-31-9-75 rajesh]$
 
 
 

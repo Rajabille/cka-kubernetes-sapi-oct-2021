@@ -132,3 +132,87 @@ spec:
 
 
 
+1004  vi empty.yaml
+ 1005  kubectl get pods -n=rajesh
+ 1006  kubectl apply -f empty.yaml -n=rajesh
+ 1007  kubectl get pods -n=rajesh
+ 1008  clear
+ 1009  ls
+ 1010  kubectl get pods -n=rajesh
+ 1011  kubectl exec test-pd ls /cache
+ 1012  kubectl exec test-pd ls /cache -n=rajesh
+ 1013  kubectl exec test-pd touch /cache/rajesh.txt -n=rajesh
+ 1014  kubectl get pods -n=rajesh -o wide
+ 1015  clear
+ 1016  kubectl get pods -n=rajesh -o wide
+ 1017  kubectl delete pod test-pd -n=rajesh
+ 1018  kubectl explain pod.spec.volumes
+ 1019  kubectl explain pod.spec.volumes.hostPath
+ 1020  kubectl explain pod.spec.volumes.hostPath.type
+ 1021  clear
+ 1022  ls
+ 1023  vi hostpath.yaml
+ 1024  kubectl apply -f hostpath.yaml
+ 1025  kubectl delete -f hostpath.yaml
+ 1026  kubectl apply -f hostpath.yaml -n=rajesh
+ 1027  kubectl get pods -n=rajesh
+ 1028  kubectl exec test-pd ls /test-pd
+ 1029  kubectl exec test-pd ls /test-pd -n=rajesh
+ 1030  kubectl exec test-pd touch /test-pd/raju.txt -n=rajesh
+ 1031  kubectl exec test-pd ls /test-pd -n=rajesh
+ 1032  kubectl get pods -n=rajesh -o wide
+ 1033  clear
+ 1034  ls
+ 1035  kubectl delete -f hostpath.yaml -n=rajesh
+ 1036  kubectl apply -f hostpath.yaml -n=rajesh
+ 1037  kubectl get pods -n=rajesh
+ 1038  kubectl get pods -n=rajesh -o wide
+ 1039  kubectl get nodes
+ 1040  clear
+ 1041  s
+ 1042  ls
+ 1043  vi pv1.yaml
+ 1044  vi pv2.yaml
+ 1045  kubectl get pv
+ 1046  kubectl apply pv1.yaml
+ 1047  kubectl apply -f pv1.yaml
+ 1048  kubectl apply -f pv2.yaml
+ 1049  kubectl get pv
+ 1050  clear
+ 1051  kubectl get ovc
+ 1052  kubectl get pvc
+ 1053  kubectl get pvc -n=rajesh
+ 1054  vi pvc1.yaml
+ 1055  kubectl apply -f pvc1.yaml -n=rajesh
+ 1056  kubectl get pvc -n=rajesh
+ 1057  kubectl get pv
+ 1058  kubectl describe pvc rajesh-pvc-1 -n=rajesh
+ 1059  clear
+ 1060  ls
+ 1061  clear
+ 1062  ls
+ 1063  vi pvc2.yaml
+ 1064  kubectl apply pvc2.yaml -n=rajesh
+ 1065  kubectl apply -f pvc2.yaml -n=rajesh
+ 1066  kubectl get pvc -n=rajesh
+ 1067  kubectl get pv
+ 1068  vi pv3.yaml
+ 1069  kubectl apply -f pv3.yaml
+ 1070  kubectl get pv
+ 1071  kubectl get pvc -n=rajesh
+ 1072  kubectl get pvc -n=rajesh;kubectl get pv
+ 1073  clear
+ 1074  ls
+ 1075  vi lastpv.yaml
+ 1076  kubectl apply -f lastpv.yaml -n=rajesh
+ 1077  kubectl get pods -n=rajesh
+ 1078  kubectl exec task-pv-pod ls /usr/share/nginx/html -n=rajesh
+ 1079  kubectl get pods -n=rajesh -o wide
+ 1080  kubectl exec task-pv-pod ls /usr/share/nginx/html/ramukaka.txt -n=rajesh
+ 1081  kubectl exec task-pv-pod touch /usr/share/nginx/html/ramukaka.txt -n=rajesh
+ 1082  kubectl exec task-pv-pod ls /usr/share/nginx/html -n=rajesh
+ 1083  history
+
+
+
+

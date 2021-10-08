@@ -1,0 +1,498 @@
+
+==============================
+Ingress
+
+Auto Scale = HPA
+
+POD obserbability
+	- Resources mgmt
+	- Affinity
+	- Selector
+
+
+Node Management
+
+Kubeadm
+
+K8s Backup and Restore
+
+Multi Master K8 Cluster
+==============================
+4 PM ----
+=============================
+Exam Readiness - 30 mins
+QA 
+
+
+======================================
+https://www.devopsschool.com/blog/kubernetes-ingress-tutorials-with-examples-and-lab-using-nodeport/
+
+
+
+https://www.devopsschool.com/blog/how-to-delete-remove-clean-existing-corrupted-or-old-kubeadm-kubernetes-clusters-setup/
+
+
+
+
+
+kubectl expose deployment hello-world-service-single --port=80 --target-port=8080 --type=ClusterIP
+===============
+They would take Label of POD from deployment
+They would create one SVC with clustor IP
+Modify SERVICE selector label from step 1
+
+
+INGRESSNODEPORTIP=$(kubectl get ingresses ingress-single -o jsonpath='{ .status.loadBalancer.ingress[].ip }')
+NODEPORT=$(kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{ .spec.ports[?(@.name=="http")].nodePort }')
+echo $INGRESSNODEPORTIP:$NODEPORT
+curl http://$INGRESSNODEPORTIP:$NODEPORT
+
+curl http://65.0.128.239:30861 
+curl http://65.0.128.167:30861
+curl http://10.108.137.128:30861
+
+
+master 
+65.0.128.239
+workder
+65.0.128.167
+
+INGRESSNODEPORTIP=$(kubectl get ingresses minimal-ingress -o jsonpath='{ .status.loadBalancer.ingress[].ip }')
+NODEPORT=$(kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{ .spec.ports[?(@.name=="http")].nodePort }')
+
+echo $INGRESSNODEPORTIP:$NODEPORT
+curl http://$INGRESSNODEPORTIP:$NODEPORT
+
+kubectl describe ingress minimal-ingress
+
+
+curl http://$INGRESSNODEPORTIP:$NODEPORT/red  --header 'Host: path.example.com'
+curl http://$INGRESSNODEPORTIP:$NODEPORT/blue --header 'Host: path.example.com'
+
+
+curl http://65.0.128.239:30861/red  --header 'Host: path.example.com'
+curl http://65.0.128.239:30861/blue --header 'Host: path.example.com'
+
+/testpath
+
+========================
+1. Step =  Deploy IC
+2. Step = Deploy your APPS and SVC
+3. Step = Deploy INGRESS
+			- Default
+			- path
+			- name
+			- TLS
+
+
+
+Auto Scale = HPA
+==================================================
+https://www.devopsschool.com/blog/kubernetes-horizontalpodautoscaler-example-programs/
+
+Software - MetricsServer -> cAdvisor 
+https://github.com/kubernetes-sigs/metrics-server
+
+
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: gcr.io/google_containers/hpa-example
+        ports:
+        - containerPort: 80
+        resources:
+          # You must specify requests for CPU to autoscale
+          # based on CPU utilization
+          requests:
+            cpu: "250m"
+
+
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: hpa-example
+spec:
+  ports:
+  - port: 80
+    nodePort: 31001
+    targetPort: http-port
+    protocol: TCP
+  selector:
+    app: hpa-example
+  type: NodePort
+
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: nginx
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nginx
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: AverageValue
+        averageValue: 100Mi
+
+
+kubectl delete -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+
+Step 1- Deploy ur apps
+Step 2 - create a SVC and use
+Step 3 - Deploy MS
+STep 4 - Create a HPA
+
+https://www.scmgalaxy.com/tutorials/kubernetes-metrics-server-error-readiness-probe-failed-http-probe-failed-with-statuscode/
+
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minimal-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /testpath
+        pathType: Prefix
+        backend:
+          service:
+            name: hello-world-service-single
+            port:
+              number: 80
+
+Statefulset
+https://www.devopsschool.com/blog/explained-kubernetes-kubernetes-statefulset-with-example/
+
+
+
+
+HA
+https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/
+https://kubernetes.io/docs/tasks/administer-cluster/highly-available-control-plane/
+https://dockerlabs.collabnix.com/kubernetes/beginners/Install-and-configure-a-multi-master-Kubernetes-cluster-with-kubeadm.html
+https://www.velotio.com/engineering-blog/demystifying-high-availability-in-kubernetes-using-kubeadm
+
+Master - 65.0.128.239
+Worker - 65.0.128.167
+
+
+[addons] Applied essential addon: kube-proxy
+
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join 172.31.36.218:6443 --token z4n3bq.yoycxj8g95kam9l1 \
+        --discovery-token-ca-cert-hash sha256:cd519be26c58b63cac6f9f9a122c213e86b5f82aa31cb26fe691d1c6e0909ef6
+
+
+Webhooks
+==================
+
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: hostpath
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/tmp/devopsschool"
+
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv0001 
+spec:
+  capacity:
+    storage: 1Gi 
+  accessModes:
+  - ReadWriteOnce 
+  hostPath:
+    path: "/tmp/devopsschool"
+
+
+Kubernetes POD observability and Deep Dive
+https://www.devopsschool.com/blog/kubernetes-pod-observability-and-deep-dive/
+
+Understanding Node Selector and Node Affinity in Kubernetes
+https://www.devopsschool.com/blog/understanding-node-selector-and-node-affinity-in-kubernetes/
+
+Node Selector
+
+Node Affinity
+
+Pod Affinity aka inter-pod affinity/anti-affinity
+
+Taints 
+======================================
+This is for Nodes
+------------------
+Node1 - Enable TAINT
+Node2 - Disable TAINT
+Node3 - 
+
+Master
+------------------
+Taints:             node-role.kubernetes.io/master:NoSchedule
+Unschedulable:      false
+
+
+			NoSchedule, 
+			PreferNoSchedule and 
+			NoExecute.
+
+kubectl taint nodes ip-172-31-36-218.ap-south-1.compute.internal node-role.kubernetes.io/master:NoSchedule-
+
+NoSchedule: Pods that do not tolerate this taint are not scheduled on the node.
+PreferNoSchedule: Kubernetes avoids scheduling Pods that do not tolerate this taint onto the node.
+NoExecute: Pod is evicted from the node if it is already running on the node, and is not scheduled onto the node if it is not yet running on the node.
+
+
+Worker
+------------------
+Taints:             <none>
+Unschedulable:      false
+
+
+
+
+Tolerations
+------------------
+This is for Pods
+https://www.devopsschool.com/blog/deep-dive-into-kubernetes-taint-with-node/
+https://www.devopsschool.com/blog/understanding-kubernetess-taints-and-tolerations-in-easy-way/
+https://www.devopsschool.com/blog/terraform-taint-and-untaint-explained-with-example-programs-and-tutorials/
+
+=============================================
+Cluster Management Commands:
+  certificate   Modify certificate resources.
+  cluster-info  Display cluster information
+  top           Display resource (CPU/memory) usage
+  cordon        Mark node as unschedulable
+  uncordon      Mark node as schedulable
+  drain         Drain node in preparation for maintenance
+  taint         Update the taints on one or more nodes
+
+https://www.devopsschool.com/blog/schedulable-unschedulable-kubernetes-node-using-kubectl-cordon-uncordon-commands/
+
+
+======================================================================================================
+
+
+
+
+
+Available Commands:
+  certs       Commands related to handling kubernetes certificates
+  completion  Output shell completion code for the specified shell (bash or zsh)
+  config      Manage configuration for a kubeadm cluster persisted in a ConfigMap in the cluster
+  help        Help about any command
+  init        Run this command in order to set up the Kubernetes control plane
+  join        Run this on any machine you wish to join an existing cluster
+  kubeconfig  Kubeconfig file utilities
+  reset       Performs a best effort revert of changes made to this host by 'kubeadm init' or 'kubeadm join'
+  token       Manage bootstrap tokens
+  upgrade     Upgrade your cluster smoothly to a newer version with this command
+  version     Print the version of kubeadm
+
+
+
+Cluster Management Commands:
+  certificate   Modify certificate resources.
+  cluster-info  Display cluster information
+  top           Display resource (CPU/memory) usage
+  cordon        Mark node as unschedulable
+  uncordon      Mark node as schedulable
+  drain         Drain node in preparation for maintenance
+  taint         Update the taints on one or more nodes
+
+
+
+
+K8s Backup and Restore
+=====================================
+		MYSQL		etcd
+	SERVER - mysqld		etcd
+	CLIENT - mysql		etcdctl
+		mysqldump	etcdctl
+
+BACKUP - PHYSICAL FILE BACKUP
+
+
+// Do not forget to mention etcd API version 3
+ETCDCTL_API=3 /tmp/etcd-download-test/etcdctl \
+--endpoints https://172.31.36.218:2379 \
+--cacert=/etc/kubernetes/pki/etcd/ca.crt \
+--cert=/etc/kubernetes/pki/etcd/server.crt \
+--key=/etc/kubernetes/pki/etcd/server.key \
+snapshot save snapshot-backup.db
+
+ETCDCTL_API=3 /tmp/etcd-download-test/etcdctl --endpoints https://172.31.36.218:2379 snapshot status /home/centos/rajesh/snapshot-backup.db
+
+// Do not forget to mention etcd API version 3
+ETCDCTL_API=3 /tmp/etcd-download-test/etcdctl \
+--endpoints https://172.31.36.218:2379 \
+--cacert=/etc/kubernetes/pki/etcd/ca.crt \
+--cert=/etc/kubernetes/pki/etcd/server.crt \
+--key=/etc/kubernetes/pki/etcd/server.key \
+snapshot restore snapshot-backup.db
+
+==================================================
+
+kubectl ENITRE --> yaml/json
+
+kubectl api-resources --verbs=list --namespaced -o name \
+  | xargs -n 1 kubectl get --show-kind --ignore-not-found -l <label>=<value> -n <namespace>
+
+
+etcd clustor
+==================
+Master - A etcd instance which managers client and data.
+	Data	- A etcd instance . a Node where DATA is stored = HEAVY	---- REPLICATE TO DATA NODES
+	Data	- A etcd instance . a Node where DATA is stored = HEAVY	---- REPLICATE TO ALL NODES
+	Data	- A etcd instance . a Node where DATA is stored = HEAVY ---- REPLICATE TO DATA NODES
+
+
+Client - A etcd instance. a url where we are sending all query = https://172.31.36.218:2379 ===> DATA NODE
+
+
+https://www.devopsschool.com/blog/understanding-the-tools-sets-in-kubernetes-ecosystem/
+
+
+
+sudo kubeadm init --control-plane-endpoint "LOAD_BALANCER_DNS:LOAD_BALANCER_PORT" --upload-certs
+
+
+...
+You can now join any number of control-plane node by running the following command on each as a root:
+    kubeadm join 192.168.0.200:6443 --token 9vr73a.a8uxyaju799qwdjv --discovery-token-ca-cert-hash sha256:7c2e69131a36ae2a042a339b33381c6d0d43887e2de83720eff5359e26aec866 --control-plane --certificate-key f8902e114ef118304e561c3ecd4d0b543adc226b7a07f675f56564185ffe0c07
+
+Please note that the certificate-key gives access to cluster sensitive data, keep it secret!
+As a safeguard, uploaded-certs will be deleted in two hours; If necessary, you can use kubeadm init phase upload-certs to reload certs afterward.
+
+Then you can join any number of worker nodes by running the following on each as root:
+    kubeadm join 192.168.0.200:6443 --token 9vr73a.a8uxyaju799qwdjv --discovery-token-ca-cert-hash sha256:7c2e69131a36ae2a042a339b33381c6d0d43887e2de83720eff5359e26aec866
+===================================================================
+
+Web hooks
+https://kubernetes.io/docs/reference/access-authn-authz/webhook/
+
+
+Hooks --> I am using you(TOOL) - SYSTM (K8)want to run CUSTOM SCRIPT
+WEB HOOKS - SCRIPT SHOULD RUN BASED ON K8 Usage
+================================================
+
+
+A WebHook is an HTTP callback: an HTTP POST that occurs when something happens; a simple event-notification via HTTP POST. A web application implementing WebHooks will POST a message to a URL when certain things happen.
+
+When specified, mode Webhook causes Kubernetes to query an outside REST service when determining user privileges.
+================================================================
+
+Exam Readiness - 30 mins
+================================================================
+https://www.youtube.com/watch?v=ikol4jNyGqg
+
+
+kub
+
+
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+
+
+https://www.devopsschool.com/blog/list-of-top-service-mesh-implementation-tools-for-microservices-and-kubernetes/
+
+https://www.devopsschool.com/blog/how-to-check-containers-readiness-inside-a-pod-using-readinessprobe/
+
+https://developers.redhat.com/blog/2020/11/10/you-probably-need-liveness-and-readiness-probes
+
+
+===========================================================================================
+===========================================================================================
+
+QnA
+https://www.devopsschool.com/lms/course/view.php?id=42
+================================================================
+================================================================
+https://www.devopsschool.com/blog/devopsschool-github-referenece/
+https://www.devopsschool.com/blog/devopsschool-github-referenece/
+https://www.devopsschool.com/blog/10-best-youtube-channels-for-programmers-and-devops-engineers/
+www.RajeshKumar.xyz
+rajesh@devopsschool.com
+
+https://www.devopsschool.com/slides/
+https://www.devopsschool.com/slide/
+https://www.devopsschool.com/pdf/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
